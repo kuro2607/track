@@ -1,4 +1,4 @@
-# kurowatch — Anime tracking Portal
+# Kuro Track — Anime tracking Portal
 
 A responsive web application for exploring, tracking, anime series
 
