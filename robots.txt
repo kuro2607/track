@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kuro2607.github.io/kuro.watch/sitemap.xml
+Sitemap: https://kuro2607.github.io/watch/sitemap.xml
