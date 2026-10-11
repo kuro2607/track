@@ -7,15 +7,22 @@
 <meta name="description" content="KuroTracker is a free anime discovery site. Search anime, see where each show streams legally, check the weekly schedule, and keep a watchlist.">
 <link rel="canonical" href="https://kuro2607.github.io/kuro.watch/">
 <meta name="robots" content="index, follow">
-<!-- After adding the site in Google Search Console, paste its verification tag here: -->
-<!-- <meta name="google-site-verification" content="YOUR_CODE"> -->
+
+<!-- ================= STEP 1: FAVICON & SEARCH LOGO ================= -->
+<link rel="icon" type="image/x-icon" href="https://kuro2607.github.io/kuro.watch/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192" href="https://kuro2607.github.io/kuro.watch/favicon.png">
+<link rel="apple-touch-icon" href="https://kuro2607.github.io/kuro.watch/favicon.png">
+
+<!-- ================= STEP 2: OPEN GRAPH & SITE NAME ================= -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="KuroTracker">
 <meta property="og:title" content="KuroTracker - Find anime, track it, watch it legally">
-<meta property="og:description" content="Search anime, see where it streams legally, check the weekly schedule, and keep a watchlist.">
+<meta property="og:description" content="Search anime, see where it streams legally, check the weekly schedule, and keep a personal anime watchlist tracker.">
 <meta property="og:url" content="https://kuro2607.github.io/kuro.watch/">
 <meta property="og:image" content="https://kuro2607.github.io/kuro.watch/favicon.png">
 <meta name="twitter:card" content="summary">
+
+<!-- ================= STEP 3: GOOGLE STRUCTURED DATA (JSON-LD) ================= -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,12 +31,10 @@
   "alternateName": ["Kuro Tracker", "Kuro Anime Tracker"],
   "url": "https://kuro2607.github.io/kuro.watch/",
   "logo": "https://kuro2607.github.io/kuro.watch/favicon.png",
-  "description": "Anime discovery, schedule and watchlist tracker."
+  "description": "Anime discovery, broadcast schedule and watchlist tracker."
 }
 </script>
-<link rel="icon" type="image/x-icon" href="https://kuro2607.github.io/kuro.watch/favicon.ico">
-<link rel="icon" type="image/png" sizes="192x192" href="https://kuro2607.github.io/kuro.watch/favicon.png">
-<link rel="apple-touch-icon" href="https://kuro2607.github.io/kuro.watch/favicon.png">
+
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -244,7 +249,35 @@ window.FIREBASE_CONFIG={
 <script>
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(window.cloudSave&&(k==='kt_list'||k==='kt_hist'))window.cloudSave()}};
+
+/* Safe storage with automatic migration from legacy kw_* keys */
+const store={
+  get(k,d){
+    try{
+      const val = localStorage.getItem(k);
+      if(val !== null) return JSON.parse(val);
+      // Migration fallback for legacy keys:
+      if(k === 'kt_list') {
+        const oldVal = localStorage.getItem('kw_list');
+        if(oldVal !== null) return JSON.parse(oldVal);
+      }
+      if(k === 'kt_hist') {
+        const oldVal = localStorage.getItem('kw_hist');
+        if(oldVal !== null) return JSON.parse(oldVal);
+      }
+      if(k === 'kt_oled') {
+        const oldVal = localStorage.getItem('kw_oled');
+        if(oldVal !== null) return JSON.parse(oldVal);
+      }
+      return d;
+    }catch(e){return d}
+  },
+  set(k,v){
+    try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}
+    if(window.cloudSave && (k==='kt_list'||k==='kt_hist'||k==='kw_list'||k==='kw_hist')) window.cloudSave();
+  }
+};
+
 let list=store.get('kt_list',{}), hist=store.get('kt_hist',[]);
 const cache={};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -377,7 +410,9 @@ async function openDetail(id){
   $('#modal-body').innerHTML='<p class="p-6 text-[#9fb39a]">Loading...</p>';
   try{
     const a=await getDetail(id);
-    hist=[{id:a.mal_id,t:name(a),i:pic(a)},...hist.filter(h=>h.id!==a.mal_id)].slice(0,24);store.set('kt_hist',hist);
+    hist=[{id:a.mal_id,t:name(a),i:pic(a)},...hist.filter(h=>h.id!==a.mal_id)].slice(0,24);
+    store.set('kt_list',list);
+    store.set('kt_hist',hist);
     const stream=(a.streaming||[]).map(s=>`<a class="btn2 text-sm" target="_blank" rel="noopener noreferrer" href="${esc(s.url)}">${esc(s.name)}</a>`).join('')
       ||`<a class="btn2 text-sm" target="_blank" rel="noopener noreferrer" href="https://www.crunchyroll.com/search?q=${encodeURIComponent(name(a))}">Search Crunchyroll</a>
          <a class="btn2 text-sm" target="_blank" rel="noopener noreferrer" href="https://www.netflix.com/search?q=${encodeURIComponent(name(a))}">Search Netflix</a>`;
@@ -471,7 +506,6 @@ function playFile(inp){
   $('#stage').innerHTML='';$('#stage').appendChild(v);v.play().catch(()=>{});
 }
 
-
 /* account + backup */
 let cloudUser=null;
 function onUser(u){cloudUser=u;$('#auth-btn').textContent=u?'Sign out ('+(u.email||'account').split('@')[0]+')':'Sign in'}
@@ -498,7 +532,6 @@ function mergeRemote(d){
 function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({list,hist})],{type:'application/json'}));a.download='kurotracker-backup.json';a.click()}
 function importData(inp){const f=inp.files[0];if(!f)return;f.text().then(t=>{try{mergeRemote(JSON.parse(t));toast('Backup imported')}catch(e){toast('That file is not a valid backup')}})}
 const getList=()=>list,getHist=()=>hist;
-
 
 /* hero banner */
 let heroT,heroI=0,heroN=0;
@@ -577,7 +610,7 @@ function renderFran(g,cur){
         <p class="text-[11px] text-[#9fb39a]">${esc((m.format\vert{}\vert{}'').replace('_',' '))}${m.seasonYear?' - '+m.seasonYear:''}</p></button>`}).join('')}</div>`).join('');
 }
 
-/* network of connected sites: add more entries to this list */
+/* network of connected sites */
 const KURO_SITES=[
   {name:'KuroHub',url:'https://kuro2607.github.io/hub/',desc:'Search once and launch anime sites, trackers and communities.',tag:'Hub'},
   {name:'KuroTracker',url:'https://kuro2607.github.io/kuro.watch/',desc:'Anime discovery, schedule and watchlist tracker.',tag:'Tracker'},
@@ -618,8 +651,11 @@ if(cfg&&cfg.apiKey&&!cfg.apiKey.startsWith('PASTE')&&!cfg.appId.startsWith('PAST
   };
   A.onAuthStateChanged(auth,async u=>{
     user=u;onUser(u);if(!u)return;
-    try{const snap=await getDoc(doc(db,'users',u.uid));if(snap.exists())mergeRemote(snap.data());window.cloudSave()}
-    catch(e){toast('Could not load your saved list')}
+    try{
+      const snap=await getDoc(doc(db,'users',u.uid));
+      if(snap.exists())mergeRemote(snap.data());
+      window.cloudSave();
+    }catch(e){toast('Could not load your saved list')}
   });
 }
 </script>
