@@ -3,22 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KuroWatch - Find anime, track it, watch it legally</title>
-<meta name="description" content="KuroWatch is a free anime discovery site. Search anime, see where each show streams legally, check the weekly schedule, and keep a watchlist.">
+<title>KuroTracker - Find anime, track it, watch it legally</title>
+<meta name="description" content="KuroTracker is a free anime discovery site. Search anime, see where each show streams legally, check the weekly schedule, and keep a watchlist.">
 <link rel="canonical" href="https://kuro2607.github.io/kuro.watch/">
 <meta name="robots" content="index, follow">
 <!-- After adding the site in Google Search Console, paste its verification tag here: -->
 <!-- <meta name="google-site-verification" content="YOUR_CODE"> -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="KuroWatch">
-<meta property="og:title" content="KuroWatch - Find anime, track it, watch it legally">
+<meta property="og:site_name" content="KuroTracker">
+<meta property="og:title" content="KuroTracker - Find anime, track it, watch it legally">
 <meta property="og:description" content="Search anime, see where it streams legally, check the weekly schedule, and keep a watchlist.">
 <meta property="og:url" content="https://kuro2607.github.io/kuro.watch/">
+<meta property="og:image" content="https://kuro2607.github.io/kuro.watch/favicon.png">
 <meta name="twitter:card" content="summary">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"KuroWatch","url":"https://kuro2607.github.io/kuro.watch/","description":"Anime discovery, schedule and watchlist tracker."}</script>
-<link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
-<link rel="icon" type="image/x-icon" sizes="48x48" href="favicon.ico">
-<link rel="apple-touch-icon" href="favicon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "KuroTracker",
+  "alternateName": ["Kuro Tracker", "Kuro Anime Tracker"],
+  "url": "https://kuro2607.github.io/kuro.watch/",
+  "logo": "https://kuro2607.github.io/kuro.watch/favicon.png",
+  "description": "Anime discovery, schedule and watchlist tracker."
+}
+</script>
+<link rel="icon" type="image/x-icon" href="https://kuro2607.github.io/kuro.watch/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192" href="https://kuro2607.github.io/kuro.watch/favicon.png">
+<link rel="apple-touch-icon" href="https://kuro2607.github.io/kuro.watch/favicon.png">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -78,7 +89,7 @@ header,main,footer{position:relative;z-index:10}
   <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center gap-3">
     <a href="#" onclick="show('discover');return false" class="flex items-center gap-2 shrink-0">
       <svg class="logo-spin w-9 h-9 sm:w-10 sm:h-10 text-green-500"><use href="#clover"/></svg>
-      <span class="brand text-2xl font-extrabold title-glow">Kuro<span class="text-green-500">Watch</span></span>
+      <span class="brand text-2xl font-extrabold title-glow">Kuro<span class="text-green-500">Tracker</span></span>
     </a>
     <form onsubmit="doSearch(event)" class="order-2 md:order-none w-full md:w-auto md:flex-1 max-w-xl">
       <input id="q" type="search" placeholder="Search anime, like Black Clover or Frieren" class="w-full rounded-xl bg-[#0d130d] border border-[#1d2a1d] px-4 py-2 outline-none focus:border-green-500" aria-label="Search anime">
@@ -131,7 +142,7 @@ header,main,footer{position:relative;z-index:10}
   </section>
 
   <section id="v-network" class="hidden max-w-4xl">
-    <h2 class="text-2xl font-extrabold mb-1 title-glow">KuroWatch network</h2>
+    <h2 class="text-2xl font-extrabold mb-1 title-glow">KuroTracker network</h2>
     <p class="text-sm text-[#9fb39a] mb-4">Sister sites that share this look and, if you sign in, the same account.</p>
     <div id="sites" class="grid sm:grid-cols-2 gap-4"></div>
   </section>
@@ -182,7 +193,7 @@ header,main,footer{position:relative;z-index:10}
 </main>
 
 <footer class="max-w-7xl mx-auto px-4 py-8 mt-6 border-t border-[#1d2a1d] text-sm text-[#9fb39a]">
-  <p class="max-w-3xl">KuroWatch is a free anime discovery site. Search thousands of anime, read synopses and scores, watch official trailers, check the weekly airing schedule, and keep a watchlist with episode progress. Every show links to the services where it streams legally. KuroWatch does not host any video.</p>
+  <p class="max-w-3xl">KuroTracker is a free anime discovery site. Search thousands of anime, read synopses and scores, watch official trailers, check the weekly airing schedule, and keep a watchlist with episode progress. Every show links to the services where it streams legally. KuroTracker does not host any video.</p>
 </footer>
 <nav id="tabbar" class="md:hidden fixed bottom-0 inset-x-0 z-40 grid grid-cols-5 bg-black/95 backdrop-blur border-t border-[#1d2a1d]" style="padding-bottom:env(safe-area-inset-bottom)">
   <button class="tab on" data-v="discover" onclick="show('discover')"><span>🔥</span>Discover</button>
@@ -233,8 +244,8 @@ window.FIREBASE_CONFIG={
 <script>
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(window.cloudSave&&(k==='kw_list'||k==='kw_hist'))window.cloudSave()}};
-let list=store.get('kw_list',{}), hist=store.get('kw_hist',[]);
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}if(window.cloudSave&&(k==='kt_list'||k==='kt_hist'))window.cloudSave()}};
+let list=store.get('kt_list',{}), hist=store.get('kt_hist',[]);
 const cache={};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error('Request timed out')),ms))]);
@@ -366,7 +377,7 @@ async function openDetail(id){
   $('#modal-body').innerHTML='<p class="p-6 text-[#9fb39a]">Loading...</p>';
   try{
     const a=await getDetail(id);
-    hist=[{id:a.mal_id,t:name(a),i:pic(a)},...hist.filter(h=>h.id!==a.mal_id)].slice(0,24);store.set('kw_hist',hist);
+    hist=[{id:a.mal_id,t:name(a),i:pic(a)},...hist.filter(h=>h.id!==a.mal_id)].slice(0,24);store.set('kt_hist',hist);
     const stream=(a.streaming||[]).map(s=>`<a class="btn2 text-sm" target="_blank" rel="noopener noreferrer" href="${esc(s.url)}">${esc(s.name)}</a>`).join('')
       ||`<a class="btn2 text-sm" target="_blank" rel="noopener noreferrer" href="https://www.crunchyroll.com/search?q=${encodeURIComponent(name(a))}">Search Crunchyroll</a>
          <a class="btn2 text-sm" target="_blank" rel="noopener noreferrer" href="https://www.netflix.com/search?q=${encodeURIComponent(name(a))}">Search Netflix</a>`;
@@ -410,13 +421,13 @@ function trackUI(id,cur,a){
 function setStatus(id,s){
   const a=window._cur;
   if(!s){delete list[id]}else{list[id]={...(list[id]||{ep:0}),u:Date.now(),status:s,t:name(a),i:pic(a),n:a.episodes||0}}
-  store.set('kw_list',list);$('#track').innerHTML=trackUI(id,list[id]||{status:'',ep:0},a);toast(s?'Saved to '+s:'Removed from list');
+  store.set('kt_list',list);$('#track').innerHTML=trackUI(id,list[id]||{status:'',ep:0},a);toast(s?'Saved to '+s:'Removed from list');
 }
 function bump(id,d){
   const it=list[id];if(!it)return;
   it.u=Date.now();it.ep=Math.max(0,Math.min(it.n||9999,(it.ep||0)+d));
   if(it.n&&it.ep>=it.n)it.status='Completed';
-  store.set('kw_list',list);$('#track').innerHTML=trackUI(id,it,window._cur);
+  store.set('kt_list',list);$('#track').innerHTML=trackUI(id,it,window._cur);
 }
 function closeModal(){$('#modal').classList.add('hidden');$('#modal-body').innerHTML='';if(!$('#v-mylist').classList.contains('hidden'))renderList()}
 addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
@@ -433,11 +444,11 @@ function renderList(){
         <button onclick="openDetail(${id})" class="text-left">
           <img src="${esc(v.i)}" alt="${esc(v.t)}" class="rounded-lg aspect-[3/4] object-cover w-full border border-[#1d2a1d]">
           <p class="text-xs font-bold clamp2 mt-1">${esc(v.t)}</p>
-          <p class="text-xs text-green-400">Ep ${v.ep||0}${v.n?' / '+v.n:''}</p></button>`).join('')}</div></div>`}).join('')
+          <p class="text-xs text-green-400">Ep ${v.ep\vert{}\vert{}0}${v.n?' / '+v.n:''}</p></button>`).join('')}</div></div>`}).join('')
     :'<p class="text-[#9fb39a]">Your list is empty. Open any anime and choose a status to add it here.</p>';
   $('#hist').innerHTML=hist.length?hist.map(h=>`<button onclick="openDetail(${h.id})"><img src="${esc(h.i)}" alt="${esc(h.t)}" class="rounded-lg aspect-[3/4] object-cover w-full border border-[#1d2a1d]"></button>`).join(''):'<p class="text-[#9fb39a] col-span-full text-sm">Nothing viewed yet.</p>';
 }
-function clearHist(){hist=[];store.set('kw_hist',hist);renderList();toast('History cleared')}
+function clearHist(){hist=[];store.set('kt_hist',hist);renderList();toast('History cleared')}
 
 /* player */
 function embed(id,list){
@@ -481,10 +492,10 @@ function mergeRemote(d){
   const r=d.list||{};
   for(const id in r){if(!list[id]||(r[id].u||0)>=(list[id].u||0))list[id]=r[id]}
   const seen=new Set(hist.map(h=>h.id));(d.hist||[]).forEach(h=>{if(!seen.has(h.id)){hist.push(h);seen.add(h.id)}});hist=hist.slice(0,24);
-  store.set('kw_list',list);store.set('kw_hist',hist);
+  store.set('kt_list',list);store.set('kt_hist',hist);
   if(!$('#v-mylist').classList.contains('hidden'))renderList();
 }
-function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({list,hist})],{type:'application/json'}));a.download='kurowatch-backup.json';a.click()}
+function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({list,hist})],{type:'application/json'}));a.download='kurotracker-backup.json';a.click()}
 function importData(inp){const f=inp.files[0];if(!f)return;f.text().then(t=>{try{mergeRemote(JSON.parse(t));toast('Backup imported')}catch(e){toast('That file is not a valid backup')}})}
 const getList=()=>list,getHist=()=>hist;
 
@@ -531,7 +542,6 @@ function heroGo(i){
   })();
 })();
 
-
 /* seasons, movies and related series (via AniList relations) */
 const FR='id idMal type format title{romaji english} seasonYear startDate{year month} coverImage{medium} relations{edges{relationType node{id type}}}';
 const FOLLOW=['PREQUEL','SEQUEL','PARENT','SIDE_STORY','SPIN_OFF','ALTERNATIVE'];
@@ -564,13 +574,13 @@ function renderFran(g,cur){
       return `<button onclick="openDetail(${id})" class="shrink-0 w-24 text-left ${id===cur?'ring-2 ring-green-500 rounded-lg':''}">
         <img loading="lazy" src="${esc(m.coverImage.medium)}" alt="" class="rounded-lg aspect-[3/4] object-cover w-full border border-[#1d2a1d]">
         <p class="text-xs font-bold clamp2 mt-1">${esc(m.title.english||m.title.romaji)}</p>
-        <p class="text-[11px] text-[#9fb39a]">${esc((m.format||'').replace('_',' '))}${m.seasonYear?' - '+m.seasonYear:''}</p></button>`}).join('')}</div>`).join('');
+        <p class="text-[11px] text-[#9fb39a]">${esc((m.format\vert{}\vert{}'').replace('_',' '))}${m.seasonYear?' - '+m.seasonYear:''}</p></button>`}).join('')}</div>`).join('');
 }
 
 /* network of connected sites: add more entries to this list */
 const KURO_SITES=[
   {name:'KuroHub',url:'https://kuro2607.github.io/hub/',desc:'Search once and launch anime sites, trackers and communities.',tag:'Hub'},
-  {name:'KuroWatch',url:'https://kuro2607.github.io/kuro.watch/',desc:'Anime discovery, schedule and watchlist tracker.',tag:'Anime'},
+  {name:'KuroTracker',url:'https://kuro2607.github.io/kuro.watch/',desc:'Anime discovery, schedule and watchlist tracker.',tag:'Tracker'},
   {name:'KuroNews',url:'https://kuro2607.github.io/kuronews/',desc:'Latest anime headlines from top news sites.',tag:'News'},
   {name:'KuroManga',url:'https://kuro2607.github.io/kuromanga/',desc:'Discover and track manga, manhwa and light novels.',tag:'Manga'}
 ];
@@ -584,8 +594,8 @@ function renderNetwork(){
 }
 
 /* theme */
-function toggleOled(){const on=document.body.classList.toggle('oled');$('#oled').textContent='OLED '+(on?'on':'off');store.set('kw_oled',on)}
-if(store.get('kw_oled',false))toggleOled();
+function toggleOled(){const on=document.body.classList.toggle('oled');$('#oled').textContent='OLED '+(on?'on':'off');store.set('kt_oled',on)}
+if(store.get('kt_oled',false))toggleOled();
 
 const _q=new URLSearchParams(location.search).get('q');
 if(_q){$('#q').value=_q;doSearch(new Event('submit'))}else loadDiscover('airing');
